@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f7f8fb;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    h1, h2, h3, h4 {
+      color: #333;
+      font-weight: 600;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Navigation Styles */
+    .navbar {
+      background-color: #f8d9e1;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ff6f91;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      padding: 8px 15px;
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+
+    .nav-links a:hover {
+      background-color: rgba(255, 111, 145, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links a.active {
+      background-color: #ff6f91;
+      color: white;
+    }
+
+    /* Dashboard Layout */
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: #f8d9e1;
+      color: #4a4a4a;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      grid-column: 1 / -1;
+    }
+
+    header h1 {
+      font-size: 28px;
+      text-align: center;
+      color: #ff6f91;
+    }
+
+    /* Profile Section */
+    .profile {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      transition: transform 0.3s;
+    }
+
+    .profile img:hover {
+      transform: scale(1.05);
+    }
+
+    .profile h2 {
+      color: #ff6f91;
+      font-size: 24px;
+    }
+
+    .profile p {
+      color: #8d8d8d;
+      font-size: 16px;
+      margin: 5px 0;
+    }
+
+    .profile button {
+      background-color: #00bcd4;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+    }
+
+    .profile button:hover {
+      background-color: #0097a7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Section Styles */
+    section {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    section:hover {
+      transform: translateY(-5px);
+    }
+
+    section h3 {
+      color: #ff6f91;
+      font-size: 22px;
+    }
+
+    section ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    section ul li {
+      background-color: #e0f7fa;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+
+    section ul li:hover {
+      background-color: #c8f0f7;
+    }
+
+    section ul li progress {
+      width: 70%;
+    }
+
+    section ul li span {
+      font-size: 14px;
+      color: #9e9e9e;
+    }
+
+    /* Progress Bar Style */
+    .progress-bar {
+      width: 100%;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      height: 20px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+
+    /* Reminder Bell Icon */
+    .reminder-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      color: #003366;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .reminder-icon:hover {
+      transform: scale(1.2) rotate(15deg);
+      color: #ff6f91;
+    }
+
+    /* Theme Toggle Icon */
+    .theme-icon {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      font-size: 24px;
+      color: #FFD700;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .theme-icon:hover {
+      transform: scale(1.2);
+    }
+
+    .dark-mode .theme-icon {
+      color: #FFD700;
+    }
+
+    .dark-mode .reminder-icon {
+      color: #00bcd4;
+    }
+
+    /* Footer Styles */
+    footer {
+      background-color: #f8d9e1;
+      text-align: center;
+      padding: 10px;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #333;
+      transition: all 0.3s;
+    }
+
+    footer:hover {
+      background-color: #f0c8d5;
+    }
+
+    /* Dark Mode Styles */
+    .dark-mode {
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+    }
+
+    .dark-mode h1,
+    .dark-mode h2,
+    .dark-mode h3,
+    .dark-mode h4 {
+      color: #ffffff;
+    }
+
+    .dark-mode header {
+      background-color: #2a2a4a;
+      color: #ffffff;
+    }
+
+    .dark-mode header h1 {
+      color: #ff8fa3;
+    }
+
+    .dark-mode footer {
+      background-color: #2a2a4a;
+      color: #ffffff;
+    }
+
+    .dark-mode .profile {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .profile h2 {
+      color: #ff8fa3;
+    }
+
+    .dark-mode .profile p {
+      color: #b0b0b0;
+    }
+
+    .dark-mode section {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+    }
+
+    .dark-mode section h3 {
+      color: #ff8fa3;
+    }
+
+    .dark-mode section ul li {
+      background-color: #3a3a3a;
+      color: #e0e0e0;
+    }
+
+    .dark-mode section ul li:hover {
+      background-color: #4a4a4a;
+    }
+
+    .dark-mode section ul li span {
+      color: #b0b0b0;
+    }
+
+    .dark-mode .navbar {
+      background-color: #2a2a4a;
+      color: white;
+    }
+
+    .dark-mode .nav-logo {
+      color: #00bcd4;
+    }
+
+    .dark-mode .nav-links a {
+      color: #e0e0e0;
+    }
+
+    .dark-mode .nav-links a.active {
+      background-color: #00bcd4;
+      color: white;
+    }
+
+    .dark-mode .progress-bar {
+      background-color: #3a3a3a;
+    }
+
+    /* Mobile Menu Styles */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #ff6f91;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .mobile-menu-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* Loading States */
+    .loading {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loading::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Modal Styles */
+    #reminder-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #reminder-modal .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 400px;
+      text-align: center;
+      transform: scale(0.9);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    #reminder-modal.active {
+      display: flex;
+    }
+
+    #reminder-modal.active .modal-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #reminder-modal button {
+      background-color: #00bcd4;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      margin: 5px;
+    }
+
+    #reminder-modal button:hover {
+      background-color: #0097a7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Dark mode modal styles */
+    .dark-mode #reminder-modal .modal-content {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+    }
+
+    .dark-mode #reminder-modal input {
+      background-color: #3a3a3a;
+      color: #e0e0e0;
+      border: 1px solid #4a4a4a;
+    }
+
+    /* Page Styles */
+    .page {
+      display: none;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-header {
+      background-color: #f8d9e1;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .page-header:hover {
+      transform: scale(1.01);
+    }
+
+    /* Dark mode page header */
+    .dark-mode .page-header {
+      background-color: #2a2a4a;
+      color: #ffffff;
+    }
+
+    .course-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-card h3 {
+      color: #ff6f91;
+      margin-top: 0;
+    }
+
+    .course-card button {
+      background-color: #00bcd4;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .course-card button:hover {
+      background-color: #0097a7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Dark mode course card */
+    .dark-mode .course-card {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .course-card h3 {
+      color: #ff8fa3;
+    }
+
+    /* Quiz Specific Styles */
+    .quiz-container {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 30px;
+      transition: all 0.3s;
+    }
+
+    .quiz-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .quiz-question {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .quiz-options {
+      margin-bottom: 20px;
+    }
+
+    .quiz-option {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .quiz-option:hover {
+      background-color: #f0f7fa;
+      transform: translateX(5px);
+    }
+
+    .quiz-option.selected {
+      background-color: #e0f7fa;
+      border-color: #00bcd4;
+      transform: translateX(10px);
+    }
+
+    .quiz-option.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+    }
+
+    .quiz-option.incorrect {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+    }
+
+    .quiz-feedback {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .quiz-feedback.correct {
+      background-color: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .quiz-feedback.incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+
+    .quiz-submit {
+      background-color: #00bcd4;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+
+    .quiz-submit:hover {
+      background-color: #0097a7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .quiz-results {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .quiz-score {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    /* Dark mode quiz styles */
+    .dark-mode .quiz-container {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .quiz-option {
+      background-color: #3a3a3a;
+      border-color: #4a4a4a;
+      color: #e0e0e0;
+    }
+
+    .dark-mode .quiz-option:hover {
+      background-color: #4a4a4a;
+    }
+
+    .dark-mode .quiz-option.selected {
+      background-color: #006064;
+      border-color: #00bcd4;
+    }
+
+    .dark-mode .quiz-results {
+      background-color: #3a3a3a;
+      color: #e0e0e0;
+    }
+
+    /* Input fields in dark mode */
+    .dark-mode input[type="text"],
+    .dark-mode input[type="datetime-local"],
+    .dark-mode input[type="file"] {
+      background-color: #3a3a3a;
+      color: #e0e0e0;
+      border: 1px solid #4a4a4a;
+    }
+
+    /* Placeholder text in dark mode */
+    .dark-mode ::placeholder {
+      color: #b0b0b0;
+      opacity: 1;
+    }
+
+    /* Responsive Layout */
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .navbar {
+        padding: 15px;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background-color: #f8d9e1;
+        flex-direction: column;
+        padding: 20px;
+        z-index: 100;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links a {
+        width: 100%;
+        text-align: center;
+        margin: 5px 0;
+      }
+
+      .dark-mode .nav-links {
+        background-color: #2a2a4a;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-logo">Student Dashboard</div>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="nav-links">
+      <a href="#" class="active" onclick="showPage('home'); toggleMobileMenu()">Home</a>
+      <a href="#" onclick="showPage('enrolled-courses'); toggleMobileMenu()">Enrolled Courses</a>
+      <a href="#" onclick="showPage('lesson-status'); toggleMobileMenu()">Lesson Completion Status</a>
+      <a href="#" onclick="showPage('upcoming-quizzes'); toggleMobileMenu()">Quizzes</a>
+      <a href="#" onclick="showPage('overall-progress'); toggleMobileMenu()">Overall Progress</a>
+    </div>
+  </nav>
+
+  <!-- Reminder Bell Icon -->
+  <div class="reminder-icon" onclick="showReminderModal()">
+    <i class="fas fa-bell"></i>
+  </div>
+
+  <!-- Theme Toggle Icon (Moon/Sun) -->
+  <div class="theme-icon" onclick="toggleTheme()">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <!-- Home Page -->
+  <div id="home" class="page active">
+    <header>
+      <h1>Welcome to Your Dashboard</h1>
+    </header>
+
+    <div class="dashboard">
+      <!-- Profile Section -->
+      <section class="profile">
+        <img id="profile-photo" src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile Picture">
+        <h2 id="user-name">Farah Khan</h2>
+        <p id="user-email">farahkhan@example.com</p>
+        <p id="user-location">Location: Sindh, Pakistan</p>
+        <input type="file" id="profile-photo-upload" onchange="uploadProfilePhoto()">
+      </section>
+
+      <!-- Lesson Completion Status Summary -->
+      <section onclick="showPage('lesson-status')" style="cursor: pointer;">
+        <h3>Lesson Completion Status</h3>
+        <ul>
+          <li>
+            <span>Introduction to JavaScript</span>
+            <progress value="60" max="100"></progress>
+            <span>60% Completed</span>
+          </li>
+          <li>
+            <span>Advanced CSS Styling</span>
+            <progress value="40" max="100"></progress>
+            <span>40% Completed</span>
+          </li>
+          <li>
+            <span>Responsive Web Design</span>
+            <progress value="80" max="100"></progress>
+            <span>80% Completed</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Enrolled Courses Summary -->
+      <section onclick="showPage('enrolled-courses')" style="cursor: pointer;">
+        <h3>Enrolled Courses</h3>
+        <ul>
+          <li>
+            <span>JavaScript for Beginners</span>
+            <progress value="50" max="100"></progress>
+            <span>50% Completed</span>
+          </li>
+          <li>
+            <span>HTML & CSS Fundamentals</span>
+            <progress value="80" max="100"></progress>
+            <span>80% Completed</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Upcoming Quizzes Summary -->
+      <section onclick="showPage('upcoming-quizzes')" style="cursor: pointer;">
+        <h3>Upcoming Quizzes</h3>
+        <ul>
+          <li>Quiz: JavaScript Basics - <span>March 25, 2025</span></li>
+          <li>Quiz: HTML Forms - <span>March 28, 2025</span></li>
+        </ul>
+      </section>
+
+      <!-- Overall Progress Summary -->
+      <section onclick="showPage('overall-progress')" style="cursor: pointer;">
+        <h3>Overall Progress</h3>
+        <div class="progress-bar">
+          <span style="width: 70%; background-color: #ff6f91;"></span>
+        </div>
+        <p>70% Progress</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- Enrolled Courses Page -->
+  <div id="enrolled-courses" class="page">
+    <div class="page-header">
+      <h1>Enrolled Courses</h1>
+    </div>
+    
+    <div class="course-card">
+      <h3>JavaScript for Beginners</h3>
+      <p>Learn the fundamentals of JavaScript programming language.</p>
+      <div class="progress-bar">
+        <span style="width: 50%; background-color: #ff6f91;"></span>
+      </div>
+      <p>50% Completed</p>
+      <button>Continue Learning</button>
+    </div>
+    
+    <div class="course-card">
+      <h3>HTML & CSS Fundamentals</h3>
+      <p>Master the building blocks of web development.</p>
+      <div class="progress-bar">
+        <span style="width: 80%; background-color: #ff6f91;"></span>
+      </div>
+      <p>80% Completed</p>
+      <button>Continue Learning</button>
+    </div>
+    
+    <div class="course-card">
+      <h3>Advanced Web Development</h3>
+      <p>Take your skills to the next level with advanced concepts.</p>
+      <div class="progress-bar">
+        <span style="width: 30%; background-color: #ff6f91;"></span>
+      </div>
+      <p>30% Completed</p>
+      <button>Continue Learning</button>
+    </div>
+  </div>
+
+  <!-- Lesson Completion Status Page -->
+  <div id="lesson-status" class="page">
+    <div class="page-header">
+      <h1>Lesson Completion Status</h1>
+    </div>
+    
+    <section>
+      <h3>JavaScript Course</h3>
+      <ul>
+        <li>
+          <span>Introduction to JavaScript</span>
+          <progress value="60" max="100"></progress>
+          <span>60% Completed</span>
+        </li>
+        <li>
+          <span>Variables and Data Types</span>
+          <progress value="45" max="100"></progress>
+          <span>45% Completed</span>
+        </li>
+        <li>
+          <span>Functions and Scope</span>
+          <progress value="20" max="100"></progress>
+          <span>20% Completed</span>
+        </li>
+      </ul>
+    </section>
+    
+    <section>
+      <h3>HTML & CSS Course</h3>
+      <ul>
+        <li>
+          <span>HTML Basics</span>
+          <progress value="100" max="100"></progress>
+          <span>100% Completed</span>
+        </li>
+        <li>
+          <span>CSS Styling</span>
+          <progress value="80" max="100"></progress>
+          <span>80% Completed</span>
+        </li>
+        <li>
+          <span>Responsive Design</span>
+          <progress value="60" max="100"></progress>
+          <span>60% Completed</span>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Upcoming Quizzes Page -->
+  <div id="upcoming-quizzes" class="page">
+    <div class="page-header">
+      <h1>Quizzes</h1>
+    </div>
+    
+    <section>
+      <h3>Active Quizzes</h3>
+      <div class="quiz-container">
+        <h4>JavaScript Basics Quiz</h4>
+        <p>Complete by: March 28, 2025</p>
+        
+        <div class="quiz-question">1. What does the "DOM" stand for in JavaScript?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false">A) Data Object Model</div>
+          <div class="quiz-option" data-correct="true">B) Document Object Model</div>
+          <div class="quiz-option" data-correct="false">C) Display Object Management</div>
+          <div class="quiz-option" data-correct="false">D) Digital Output Module</div>
+        </div>
+        <div class="quiz-feedback correct">Correct! The DOM stands for Document Object Model.</div>
+        <div class="quiz-feedback incorrect">Incorrect. The correct answer is B) Document Object Model.</div>
+        
+        <div class="quiz-question">2. Which of these is NOT a JavaScript data type?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false">A) String</div>
+          <div class="quiz-option" data-correct="false">B) Number</div>
+          <div class="quiz-option" data-correct="true">C) Character</div>
+          <div class="quiz-option" data-correct="false">D) Boolean</div>
+        </div>
+        <div class="quiz-feedback correct">Correct! JavaScript doesn't have a separate Character type.</div>
+        <div class="quiz-feedback incorrect">Incorrect. The correct answer is C) Character.</div>
+        
+        <div class="quiz-question">3. What will "console.log(typeof null)" output?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" data-correct="false">A) "null"</div>
+          <div class="quiz-option" data-correct="true">B) "object"</div>
+          <div class="quiz-option" data-correct="false">C) "undefined"</div>
+          <div class="quiz-option" data-correct="false">D) It will throw an error</div>
+        </div>
+        <div class="quiz-feedback correct">Correct! This is a well-known quirk in JavaScript.</div>
+        <div class="quiz-feedback incorrect">Incorrect. The correct answer is B) "object".</div>
+        
+        <button class="quiz-submit" onclick="submitQuiz(this)">Submit Quiz</button>
+        
+        <div class="quiz-results">
+          <div class="quiz-score">Your score: <span class="score-value">0</span>/3</div>
+          <p class="quiz-summary"></p>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h3>Upcoming Quizzes</h3>
+      <ul>
+        <li>Quiz: CSS Flexbox - <span>April 2, 2025</span></li>
+        <li>Quiz: JavaScript Functions - <span>April 5, 2025</span></li>
+      </ul>
+    </section>
+    
+    <section>
+      <h3>Completed Quizzes</h3>
+      <ul>
+        <li>Quiz: HTML Basics - <span>March 15, 2025 - Score: 85%</span></li>
+        <li>Quiz: CSS Selectors - <span>March 18, 2025 - Score: 92%</span></li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Overall Progress Page -->
+  <div id="overall-progress" class="page">
+    <div class="page-header">
+      <h1>Overall Progress</h1>
+    </div>
+    
+    <section>
+      <h3>Course Completion</h3>
+      <div class="progress-bar">
+        <span style="width: 70%; background-color: #ff6f91;"></span>
+      </div>
+      <p>70% of all courses completed</p>
+    </section>
+    
+    <section>
+      <h3>Skills Progress</h3>
+      <ul>
+        <li>
+          <span>HTML</span>
+          <progress value="85" max="100"></progress>
+          <span>85%</span>
+        </li>
+        <li>
+          <span>CSS</span>
+          <progress value="75" max="100"></progress>
+          <span>75%</span>
+        </li>
+        <li>
+          <span>JavaScript</span>
+          <progress value="60" max="100"></progress>
+          <span>60%</span>
+        </li>
+      </ul>
+    </section>
+    
+    <section>
+      <h3>Time Spent Learning</h3>
+      <p>Total: 45 hours</p>
+      <p>This week: 8 hours</p>
+    </section>
+  </div>
+
+  <!-- Modal for Adding Reminder -->
+  <div id="reminder-modal">
+    <div class="modal-content">
+      <h3>Add New Reminder</h3>
+      <input type="text" id="reminder-task" placeholder="Reminder Task">
+      <input type="datetime-local" id="reminder-time">
+      <button onclick="saveReminder()">Save Reminder</button>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Student Dashboard | All rights reserved</p>
+  </footer>
+
+  <script>
+    // Toggle Dark/Light Mode
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeIcon = document.querySelector('.theme-icon i');
+      if (document.body.classList.contains('dark-mode')) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      const themeIcon = document.querySelector('.theme-icon i');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+
+    // Mobile Menu Toggle
+    function toggleMobileMenu() {
+      const navLinks = document.querySelector('.nav-links');
+      navLinks.classList.toggle('active');
+      
+      const menuBtn = document.querySelector('.mobile-menu-btn i');
+      if (navLinks.classList.contains('active')) {
+        menuBtn.classList.remove('fa-bars');
+        menuBtn.classList.add('fa-times');
+      } else {
+        menuBtn.classList.remove('fa-times');
+        menuBtn.classList.add('fa-bars');
+      }
+    }
+
+    // Profile photo update functionality with loading state
+    function uploadProfilePhoto() {
+      const fileInput = document.getElementById('profile-photo-upload');
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      const profileSection = document.querySelector('.profile');
+      
+      profileSection.classList.add('loading');
+      
+      reader.onload = function(e) {
+        setTimeout(() => {
+          document.getElementById('profile-photo').src = e.target.result;
+          localStorage.setItem('profilePhoto', e.target.result);
+          profileSection.classList.remove('loading');
+          
+          // Add temporary animation to show success
+          const img = document.getElementById('profile-photo');
+          img.style.transform = 'scale(1.1)';
+          setTimeout(() => {
+            img.style.transform = 'scale(1)';
+          }, 300);
+        }, 800); // Simulate network delay
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      } else {
+        profileSection.classList.remove('loading');
+      }
+    }
+
+    // Load saved profile photo if exists
+    if (localStorage.getItem('profilePhoto')) {
+      document.getElementById('profile-photo').src = localStorage.getItem('profilePhoto');
+    }
+
+    // Reminder Modal functions with animation
+    function showReminderModal() {
+      const modal = document.getElementById('reminder-modal');
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('reminder-modal');
+      modal.classList.remove('active');
+    }
+
+    // Save reminder with loading state
+    let reminderTime = null;
+
+    function saveReminder() {
+      const task = document.getElementById('reminder-task').value;
+      const time = document.getElementById('reminder-time').value;
+      const saveBtn = document.querySelector('#reminder-modal button:first-of-type');
+      
+      if (task && time) {
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        saveBtn.disabled = true;
+        
+        // Simulate async operation
+        setTimeout(() => {
+          reminderTime = new Date(time).getTime();
+          saveBtn.innerHTML = 'Save Reminder';
+          saveBtn.disabled = false;
+          
+          // Show confirmation animation
+          const modalContent = document.querySelector('.modal-content');
+          modalContent.style.transform = 'scale(1.05)';
+          setTimeout(() => {
+            modalContent.style.transform = 'scale(1)';
+          }, 300);
+          
+          alert(`Reminder set: ${task} at ${new Date(time).toLocaleString()}`);
+          closeModal();
+          startReminderCheck();
+        }, 1000);
+      } else {
+        alert('Please enter both task and time');
+      }
+    }
+
+    // Check for reminder and trigger notification
+    function startReminderCheck() {
+      setInterval(function() {
+        const currentTime = new Date().getTime();
+        if (reminderTime && currentTime >= reminderTime) {
+          // Make bell animate when reminder triggers
+          const bell = document.querySelector('.reminder-icon');
+          bell.style.animation = 'shake 0.5s';
+          setTimeout(() => {
+            bell.style.animation = '';
+          }, 500);
+          
+          alert('Your reminder time has arrived!');
+          reminderTime = null; // Clear reminder after alert
+        }
+      }, 1000); // Check every second
+    }
+
+    // Page Navigation Functionality with animation
+    function showPage(pageId) {
+      // Hide all pages with fade out
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(page => {
+        if (page.classList.contains('active')) {
+          page.style.animation = 'fadeOut 0.3s ease';
+          setTimeout(() => {
+            page.classList.remove('active');
+            page.style.animation = '';
+          }, 300);
+        }
+      });
+      
+      // Show selected page with fade in
+      setTimeout(() => {
+        const activePage = document.getElementById(pageId);
+        activePage.classList.add('active');
+      }, 300);
+      
+      // Update active nav link
+      const navLinks = document.querySelectorAll('.nav-links a');
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(`showPage('${pageId}')`)) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    // Quiz Functionality with enhanced animations
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add click event to quiz options
+      const quizOptions = document.querySelectorAll('.quiz-option');
+      quizOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          // Remove selected class from siblings
+          const siblings = this.parentNode.children;
+          for (let sibling of siblings) {
+            sibling.classList.remove('selected');
+          }
+          
+          // Add selected class to clicked option with animation
+          this.classList.add('selected');
+          
+          // Hide all feedback for this question
+          const questionContainer = this.closest('.quiz-options').parentNode;
+          const feedbacks = questionContainer.querySelectorAll('.quiz-feedback');
+          feedbacks.forEach(feedback => feedback.style.display = 'none');
+        });
+      });
+    });
+
+    function submitQuiz(button) {
+      const quizContainer = button.closest('.quiz-container');
+      const selectedOptions = quizContainer.querySelectorAll('.quiz-option.selected');
+      let score = 0;
+      
+      // Disable all options after submission
+      const allOptions = quizContainer.querySelectorAll('.quiz-option');
+      allOptions.forEach(option => {
+        option.style.pointerEvents = 'none';
+      });
+      
+      // Check each selected answer with delay for animation
+      selectedOptions.forEach((option, index) => {
+        setTimeout(() => {
+          const isCorrect = option.getAttribute('data-correct') === 'true';
+          if (isCorrect) {
+            option.classList.add('correct');
+            score++;
+          } else {
+            option.classList.add('incorrect');
+          }
+          
+          // Find and show the correct answer
+          const questionContainer = option.closest('.quiz-options').parentNode;
+          const correctFeedback = questionContainer.querySelector('.quiz-feedback.correct');
+          const incorrectFeedback = questionContainer.querySelector('.quiz-feedback.incorrect');
+          
+          if (isCorrect) {
+            correctFeedback.style.display = 'block';
+          } else {
+            incorrectFeedback.style.display = 'block';
+          }
+        }, index * 300); // Stagger the animations
+      });
+      
+      // Show results after all animations complete
+      setTimeout(() => {
+        const resultsContainer = quizContainer.querySelector('.quiz-results');
+        const scoreElement = quizContainer.querySelector('.score-value');
+        const summaryElement = quizContainer.querySelector('.quiz-summary');
+        
+        scoreElement.textContent = score;
+        const totalQuestions = quizContainer.querySelectorAll('.quiz-question').length;
+        const percentage = Math.round((score / totalQuestions) * 100);
+        
+        summaryElement.textContent = `You answered ${score} out of ${totalQuestions} questions correctly (${percentage}%).`;
+        
+        if (percentage >= 70) {
+          summaryElement.textContent += " Great job!";
+        } else {
+          summaryElement.textContent += " Keep practicing!";
+        }
+        
+        resultsContainer.style.display = 'block';
+        button.disabled = true;
+        
+        // Add celebration effect for good scores
+        if (percentage >= 70) {
+          resultsContainer.style.animation = 'pulse 1s';
+          setTimeout(() => {
+            resultsContainer.style.animation = '';
+          }, 1000);
+        }
+      }, selectedOptions.length * 300);
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+      const modal = document.getElementById('reminder-modal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Add keyframe animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-5px); }
+        40%, 80% { transform: translateX(5px); }
+      }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+      }
+      @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(10px); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
